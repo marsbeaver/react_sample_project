@@ -1,24 +1,37 @@
-import logo from './logo.svg';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-
+import ErrorBoundary from './components/errorBoundaries/errorBoundaries';
+import Dashboard from './dashboard/dashboard';
+import Home from './home';
+import Login from './login/login';
+import { LoginProvider } from './login/loginContext';
+import Signup from './signup/signup';
+import { SignupProvider } from './signup/signupContext';
+import { Suspense } from 'react';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Suspense fallback={<h1>Loading...</h1>}>
+      <ErrorBoundary fallback={<p>Somthing went wrong</p>}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+
+            <Route path="/signup" element={
+              <SignupProvider>
+                <Signup />
+              </SignupProvider>
+            } />
+            <Route path="/login" element={
+              <LoginProvider>
+                <Login />
+              </LoginProvider>
+            } />
+            <Route path="/dashboard" element={<Dashboard />} />
+
+          </Routes>
+        </Router>
+      </ErrorBoundary>
+    </Suspense>
   );
 }
 
